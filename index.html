@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>건담 입문 가이드</title>
+<meta name="description" content="1979년부터 이어진 로봇 애니메이션 시리즈 '건담'을 한 페이지로 소개합니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0f17;
+    --bg-2: #121826;
+    --panel: #171f30;
+    --line: #26314a;
+    --text: #e8ecf4;
+    --muted: #9aa6bd;
+    --white: #f4f6fa;
+    --blue: #2f6fe4;
+    --red: #e23b3b;
+    --yellow: #f5c518;
+    --radius: 14px;
+    --max: 1120px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Noto Sans KR", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
+  .en { font-family: "Orbitron", sans-serif; letter-spacing: .08em; }
+
+  /* ---------- 헤더 ---------- */
+  header {
+    position: fixed; inset: 0 0 auto 0; z-index: 50;
+    background: rgba(11,15,23,.82);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 900; }
+  .logo-mark { display: flex; gap: 3px; }
+  .logo-mark i { width: 6px; height: 22px; border-radius: 2px; display: block; }
+  .logo-mark i:nth-child(1){ background: var(--blue); }
+  .logo-mark i:nth-child(2){ background: var(--white); }
+  .logo-mark i:nth-child(3){ background: var(--red); }
+  .logo-mark i:nth-child(4){ background: var(--yellow); }
+  .menu { display: flex; gap: 28px; list-style: none; font-size: .95rem; color: var(--muted); }
+  .menu a:hover { color: var(--white); }
+  .burger { display: none; background: none; border: 0; color: var(--text); font-size: 1.6rem; cursor: pointer; }
+
+  /* ---------- 히어로 ---------- */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding-top: 64px; position: relative; overflow: hidden;
+    background:
+      radial-gradient(ellipse at 75% 40%, rgba(47,111,228,.25), transparent 60%),
+      linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+  }
+  .hero::before { /* 그리드 배경 */
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+  }
+  .hero-inner { position: relative; display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items: center; }
+  .tag { display: inline-block; font-size: .8rem; color: var(--yellow); border: 1px solid var(--yellow); padding: 4px 12px; border-radius: 99px; margin-bottom: 20px; }
+  .hero h1 { font-size: clamp(2.4rem, 6vw, 4.4rem); line-height: 1.15; font-weight: 900; margin-bottom: 20px; }
+  .hero h1 span { color: var(--blue); }
+  .hero p { color: var(--muted); font-size: 1.1rem; max-width: 520px; margin-bottom: 32px; }
+  .btns { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn { padding: 13px 26px; border-radius: 10px; font-weight: 700; transition: transform .2s, background .2s; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary { background: var(--red); color: #fff; }
+  .btn-ghost { border: 1px solid var(--line); color: var(--text); }
+  .btn-ghost:hover { background: var(--panel); }
+
+  /* CSS로 만든 추상 메카 헤드 (공식 디자인 아님) */
+  .mecha { position: relative; width: min(340px, 80vw); aspect-ratio: 1; margin: 0 auto; animation: float 5s ease-in-out infinite; }
+  .ring { position: absolute; inset: 0; border: 2px dashed rgba(47,111,228,.4); border-radius: 50%; animation: spin 30s linear infinite; }
+  .ring.r2 { inset: 30px; border-style: solid; border-color: rgba(255,255,255,.08); animation-duration: 50s; animation-direction: reverse; }
+  .head { position: absolute; left: 50%; top: 52%; transform: translate(-50%,-50%); width: 46%; height: 50%; }
+  .head .face { position: absolute; inset: 18% 10% 0; background: linear-gradient(160deg, #fff, #c9d2e3); clip-path: polygon(15% 0, 85% 0, 100% 40%, 85% 100%, 15% 100%, 0 40%); }
+  .head .visor { position: absolute; left: 22%; right: 22%; top: 42%; height: 11%; background: #0d1626; clip-path: polygon(0 0, 100% 0, 92% 100%, 8% 100%); }
+  .head .visor::before, .head .visor::after { content: ""; position: absolute; top: 25%; width: 32%; height: 50%; background: #5cf0ff; box-shadow: 0 0 12px #5cf0ff; animation: blink 4s infinite; }
+  .head .visor::before { left: 8%; } .head .visor::after { right: 8%; }
+  .head .chin { position: absolute; left: 38%; right: 38%; bottom: 4%; height: 16%; background: var(--red); clip-path: polygon(0 0, 100% 0, 80% 100%, 20% 100%); }
+  .head .crest { position: absolute; left: 50%; top: 0; width: 120%; height: 30%; transform: translateX(-50%); }
+  .head .crest::before, .head .crest::after { content: ""; position: absolute; bottom: 0; width: 50%; height: 100%; background: var(--yellow); }
+  .head .crest::before { left: 0; clip-path: polygon(0 0, 18% 0, 100% 85%, 100% 100%, 80% 100%); }
+  .head .crest::after  { right: 0; clip-path: polygon(82% 0, 100% 0, 20% 100%, 0 100%, 0 85%); }
+  .head .gem { position: absolute; left: 50%; top: 22%; width: 12%; aspect-ratio: 1; transform: translateX(-50%) rotate(45deg); background: var(--red); z-index: 2; }
+
+  @keyframes float { 50% { transform: translateY(-12px); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes blink { 0%, 92%, 100% { opacity: 1; } 95% { opacity: .2; } }
+
+  /* ---------- 공통 섹션 ---------- */
+  section { padding: 100px 0; }
+  .sec-head { margin-bottom: 48px; }
+  .sec-head .en { color: var(--blue); font-size: .85rem; }
+  .sec-head h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 900; margin-top: 6px; }
+  .sec-head p { color: var(--muted); margin-top: 10px; max-width: 640px; }
+  .alt { background: var(--bg-2); }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s, transform .7s; }
+  .reveal.show { opacity: 1; transform: none; }
+
+  /* ---------- 소개 ---------- */
+  .about-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: start; }
+  .about-text p + p { margin-top: 16px; }
+  .about-text strong { color: var(--yellow); }
+  .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .fact { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+  .fact b { display: block; font-size: 1.8rem; font-weight: 900; color: var(--white); }
+  .fact span { color: var(--muted); font-size: .9rem; }
+
+  /* ---------- 세계관 ---------- */
+  .world { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; transition: transform .25s, border-color .25s; }
+  .card:hover { transform: translateY(-4px); border-color: var(--blue); }
+  .card .icon { width: 44px; height: 44px; border-radius: 10px; display: grid; place-items: center; font-size: 1.3rem; margin-bottom: 16px; }
+  .card h3 { font-size: 1.2rem; margin-bottom: 8px; }
+  .card p { color: var(--muted); font-size: .95rem; }
+
+  /* ---------- 주요 기체 ---------- */
+  .ms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+  .ms { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; transition: transform .25s; }
+  .ms:hover { transform: translateY(-4px); }
+  .ms-top { height: 120px; position: relative; display: flex; align-items: flex-end; padding: 16px; }
+  .ms-top .code { font-family: "Orbitron", sans-serif; font-weight: 800; font-size: 1.5rem; color: rgba(255,255,255,.95); text-shadow: 0 2px 10px rgba(0,0,0,.4); }
+  .ms-top::after { content: ""; position: absolute; right: -20px; top: -20px; width: 120px; height: 120px; border: 14px solid rgba(255,255,255,.12); border-radius: 50%; }
+  .ms-body { padding: 18px 20px 22px; }
+  .ms-body h3 { font-size: 1.1rem; }
+  .ms-body .pilot { color: var(--yellow); font-size: .85rem; margin: 2px 0 10px; }
+  .ms-body p { color: var(--muted); font-size: .92rem; }
+
+  /* ---------- 연표 ---------- */
+  .tabs { display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; }
+  .tab { background: var(--panel); color: var(--muted); border: 1px solid var(--line); padding: 8px 18px; border-radius: 99px; cursor: pointer; font: inherit; font-size: .9rem; }
+  .tab.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before { content: ""; position: absolute; left: 6px; top: 6px; bottom: 6px; width: 2px; background: var(--line); }
+  .tl { position: relative; padding: 0 0 26px; }
+  .tl::before { content: ""; position: absolute; left: -27px; top: 8px; width: 12px; height: 12px; border-radius: 50%; background: var(--bg-2); border: 2px solid var(--blue); }
+  .tl[data-type="alt"]::before { border-color: var(--yellow); }
+  .tl .year { font-family: "Orbitron", sans-serif; font-size: .85rem; color: var(--muted); }
+  .tl h4 { font-size: 1.05rem; }
+  .tl p { color: var(--muted); font-size: .92rem; }
+  .tl.hide { display: none; }
+  .legend { display: flex; gap: 18px; color: var(--muted); font-size: .85rem; margin-bottom: 20px; }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+
+  /* ---------- 건프라 ---------- */
+  .grades { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .grade { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; text-align: center; }
+  .grade .g { font-family: "Orbitron", sans-serif; font-size: 2rem; font-weight: 800; }
+  .grade .scale { color: var(--yellow); font-size: .85rem; margin-bottom: 8px; }
+  .grade p { color: var(--muted); font-size: .9rem; }
+  .tip { margin-top: 28px; background: linear-gradient(90deg, rgba(47,111,228,.18), transparent); border-left: 4px solid var(--blue); padding: 18px 22px; border-radius: 0 var(--radius) var(--radius) 0; }
+
+  /* ---------- 방명록 ---------- */
+  .gb-grid { display: grid; grid-template-columns: 360px 1fr; gap: 28px; align-items: start; }
+  .gb-form { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; display: grid; gap: 14px; position: sticky; top: 84px; }
+  .gb-form label { font-size: .85rem; color: var(--muted); display: grid; gap: 6px; }
+  .gb-form input, .gb-form select, .gb-form textarea {
+    font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line);
+    border-radius: 10px; padding: 10px 12px; width: 100%;
+  }
+  .gb-form textarea { resize: vertical; min-height: 96px; }
+  .gb-form input:focus, .gb-form select:focus, .gb-form textarea:focus { outline: 2px solid var(--blue); border-color: transparent; }
+  .gb-form button { font: inherit; font-weight: 700; border: 0; cursor: pointer; }
+  .gb-form button:disabled { opacity: .6; cursor: wait; }
+  .gb-count { font-size: .8rem; color: var(--muted); text-align: right; margin-top: -8px; }
+  .gb-status { font-size: .88rem; min-height: 1.4em; }
+  .gb-status.err { color: #ff7b7b; } .gb-status.ok { color: #7be0a3; }
+  .gb-list { display: grid; gap: 12px; }
+  .gb-item { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; }
+  .gb-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 6px; }
+  .gb-meta b { color: var(--white); }
+  .gb-meta .chip { font-size: .75rem; color: var(--yellow); border: 1px solid rgba(245,197,24,.4); padding: 1px 8px; border-radius: 99px; }
+  .gb-meta time { color: var(--muted); font-size: .8rem; margin-left: auto; }
+  .gb-item p { color: var(--text); white-space: pre-wrap; word-break: break-word; }
+  .gb-empty { color: var(--muted); padding: 24px; text-align: center; border: 1px dashed var(--line); border-radius: var(--radius); }
+  .gb-more { justify-self: center; background: none; color: var(--muted); border: 1px solid var(--line); padding: 8px 20px; border-radius: 99px; font: inherit; cursor: pointer; }
+  @media (max-width: 860px) { .gb-grid { grid-template-columns: 1fr; } .gb-form { position: static; } }
+
+  /* ---------- 푸터 ---------- */
+  footer { border-top: 1px solid var(--line); padding: 36px 0; color: var(--muted); font-size: .85rem; text-align: center; }
+
+  /* ---------- 반응형 ---------- */
+  @media (max-width: 860px) {
+    .hero-inner, .about-grid { grid-template-columns: 1fr; }
+    .hero-inner { text-align: center; }
+    .hero p { margin-left: auto; margin-right: auto; }
+    .btns { justify-content: center; }
+    .mecha { width: 240px; order: -1; }
+    .world { grid-template-columns: 1fr; }
+    .grades { grid-template-columns: 1fr 1fr; }
+    .burger { display: block; }
+    .menu {
+      position: absolute; top: 64px; left: 0; right: 0; flex-direction: column; gap: 0;
+      background: var(--bg); border-bottom: 1px solid var(--line); display: none;
+    }
+    .menu.open { display: flex; }
+    .menu a { display: block; padding: 14px 20px; }
+    section { padding: 72px 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap nav">
+    <a href="#top" class="logo"><span class="logo-mark"><i></i><i></i><i></i><i></i></span>건담 입문 가이드</a>
+    <button class="burger" aria-label="메뉴 열기" id="burger">☰</button>
+    <ul class="menu" id="menu">
+      <li><a href="#about">건담이란</a></li>
+      <li><a href="#world">세계관</a></li>
+      <li><a href="#ms">주요 기체</a></li>
+      <li><a href="#series">시리즈</a></li>
+      <li><a href="#gunpla">건프라</a></li>
+      <li><a href="#guestbook">방명록</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- 히어로 -->
+<section class="hero" id="top">
+  <div class="wrap hero-inner">
+    <div>
+      <span class="tag">SINCE 1979</span>
+      <h1>로봇이 아닌,<br><span>전쟁과 사람</span>의<br>이야기</h1>
+      <p>1979년 『기동전사 건담』으로 시작해 40년 넘게 이어지고 있는 일본 로봇 애니메이션의 대표 시리즈. 처음 접하는 분을 위해 핵심만 정리했습니다.</p>
+      <div class="btns">
+        <a href="#about" class="btn btn-primary">입문하기</a>
+        <a href="#series" class="btn btn-ghost">시리즈 연표 보기</a>
+      </div>
+    </div>
+    <div class="mecha" aria-hidden="true">
+      <div class="ring"></div><div class="ring r2"></div>
+      <div class="head">
+        <div class="crest"></div><div class="gem"></div>
+        <div class="face"></div><div class="visor"></div><div class="chin"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 소개 -->
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="en">ABOUT</span>
+      <h2>건담이란?</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>『기동전사 건담』은 <strong>토미노 요시유키</strong> 감독이 연출하고 선라이즈가 제작해 1979년 4월 일본에서 처음 방영된 TV 애니메이션입니다. 캐릭터 디자인은 야스히코 요시카즈, 메카닉 디자인은 오카와라 쿠니오가 맡았습니다.</p>
+        <p>그 전까지의 로봇 애니메이션이 '정의의 슈퍼 로봇이 악당을 물리치는' 이야기였다면, 건담은 로봇을 대량 생산되는 <strong>병기('모빌슈트')</strong>로 그렸습니다. 선악이 분명하지 않은 전쟁, 그 안에서 성장하고 상처받는 소년병들의 이야기는 <strong>'리얼 로봇'</strong>이라는 장르를 열었습니다.</p>
+        <p>첫 방영 당시 시청률은 저조해 조기 종영됐지만, 재방송과 극장판, 그리고 프라모델 '건프라'가 폭발적인 인기를 얻으며 지금의 거대한 프랜차이즈로 자라났습니다.</p>
+      </div>
+      <div class="facts reveal">
+        <div class="fact"><b class="en">1979</b><span>첫 TV 시리즈 방영</span></div>
+        <div class="fact"><b class="en">1980</b><span>첫 건프라 발매</span></div>
+        <div class="fact"><b class="en">18m</b><span>RX-78-2 건담 전고</span></div>
+        <div class="fact"><b class="en">U.C.</b><span>원조 세계관 '우주세기'</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 세계관 -->
+<section id="world" class="alt">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="en">UNIVERSAL CENTURY</span>
+      <h2>원조 세계관: 우주세기</h2>
+      <p>인구 증가로 인류의 상당수가 우주 식민지 '스페이스 콜로니'로 이주한 미래. 연호를 '우주세기(U.C.)'로 바꾼 지 79년째 되는 해, 전쟁이 시작됩니다.</p>
+    </div>
+    <div class="world">
+      <div class="card reveal">
+        <div class="icon" style="background:rgba(47,111,228,.2)">🌍</div>
+        <h3>지구연방</h3>
+        <p>지구에 본부를 둔 통일 정부. 거대한 국력을 가졌지만 관료주의에 물들어 있으며, 전쟁 초반 열세에 몰린 끝에 건담을 개발합니다.</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon" style="background:rgba(226,59,59,.2)">🛰️</div>
+        <h3>지온 공국</h3>
+        <p>지구에서 가장 먼 콜로니 집단 '사이드 3'이 세운 국가. 우주 이민자의 독립을 내세워 연방에 선전포고하고, 모빌슈트 '자쿠'로 초반 전세를 장악합니다.</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon" style="background:rgba(245,197,24,.2)">⚡</div>
+        <h3>1년 전쟁</h3>
+        <p>U.C. 0079년부터 약 1년간 이어진 연방과 지온의 전쟁. 인류 인구의 절반이 희생된 이 전쟁이 첫 작품의 배경이며, 이후 시리즈의 출발점이 됩니다.</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon" style="background:rgba(92,240,255,.15)">🤖</div>
+        <h3>모빌슈트</h3>
+        <p>인간이 탑승해 조종하는 인간형 병기. 레이더를 무력화하는 '미노프스키 입자' 때문에 근접전이 중요해지면서 주력 병기가 되었다는 설정입니다.</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon" style="background:rgba(160,120,255,.2)">✨</div>
+        <h3>뉴타입</h3>
+        <p>우주 환경에 적응해 뛰어난 직감과 공감 능력을 갖게 된 인류. 시리즈 전체를 관통하는 '사람은 서로를 이해할 수 있는가'라는 주제를 상징합니다.</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon" style="background:rgba(255,255,255,.1)">🎭</div>
+        <h3>라이벌 구도</h3>
+        <p>연방의 소년 파일럿 아무로 레이와 지온의 에이스 '붉은 혜성' 샤아 아즈나블. 두 사람의 대립은 애니메이션 역사상 가장 유명한 라이벌 관계로 꼽힙니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 주요 기체 -->
+<section id="ms">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="en">MOBILE SUITS</span>
+      <h2>꼭 알아둘 기체</h2>
+      <p>시리즈마다 수많은 모빌슈트가 등장하지만, 이 정도만 알아도 대화에 끼어들 수 있습니다.</p>
+    </div>
+    <div class="ms-grid">
+      <article class="ms reveal">
+        <div class="ms-top" style="background:linear-gradient(135deg,#2f6fe4,#e8ecf4)"><span class="code">RX-78-2</span></div>
+        <div class="ms-body"><h3>건담</h3><div class="pilot">파일럿 · 아무로 레이</div><p>모든 것의 시작. 흰색·파랑·빨강·노랑의 트리콜로 컬러는 시리즈의 상징이 되었습니다.</p></div>
+      </article>
+      <article class="ms reveal">
+        <div class="ms-top" style="background:linear-gradient(135deg,#3f6b3a,#8fb36b)"><span class="code">MS-06</span></div>
+        <div class="ms-body"><h3>자쿠 II</h3><div class="pilot">지온군 주력 양산기</div><p>모노아이(외눈)가 특징인 양산형 모빌슈트. 샤아 전용 붉은 자쿠는 "통상의 3배 속도"로 유명합니다.</p></div>
+      </article>
+      <article class="ms reveal">
+        <div class="ms-top" style="background:linear-gradient(135deg,#c62828,#ff8a65)"><span class="code">MSN-04</span></div>
+        <div class="ms-body"><h3>사자비</h3><div class="pilot">파일럿 · 샤아 아즈나블</div><p>극장판 『역습의 샤아』에 등장한 샤아의 마지막 기체. 붉은 거구와 원격 무기 '판넬'이 특징입니다.</p></div>
+      </article>
+      <article class="ms reveal">
+        <div class="ms-top" style="background:linear-gradient(135deg,#1c1c22,#d9d9e0)"><span class="code">RX-93</span></div>
+        <div class="ms-body"><h3>ν(뉴) 건담</h3><div class="pilot">파일럿 · 아무로 레이</div><p>사자비의 숙적. 한쪽 어깨에 늘어선 핀 판넬이 인상적인, 우주세기 최고 인기 기체 중 하나입니다.</p></div>
+      </article>
+      <article class="ms reveal">
+        <div class="ms-top" style="background:linear-gradient(135deg,#e8ecf4,#e23b3b)"><span class="code">RX-0</span></div>
+        <div class="ms-body"><h3>유니콘 건담</h3><div class="pilot">파일럿 · 바나지 링크스</div><p>평소엔 뿔 하나인 유니콘 모드, 각성하면 붉게 빛나는 '데스트로이 모드'로 변신합니다.</p></div>
+      </article>
+      <article class="ms reveal">
+        <div class="ms-top" style="background:linear-gradient(135deg,#1f3a8a,#f5c518)"><span class="code">XXXG-00W0</span></div>
+        <div class="ms-body"><h3>윙 건담 제로</h3><div class="pilot">파일럿 · 히이로 유이</div><p>『신기동전기 건담 W』의 상징. 거대한 날개와 강력한 트윈 버스터 라이플로 사랑받았습니다.</p></div>
+      </article>
+      <article class="ms reveal">
+        <div class="ms-top" style="background:linear-gradient(135deg,#1e2a5a,#7ab8ff)"><span class="code">ZGMF-X10A</span></div>
+        <div class="ms-body"><h3>프리덤 건담</h3><div class="pilot">파일럿 · 키라 야마토</div><p>『기동전사 건담 SEED』의 대표 기체. 푸른 날개를 펼친 '풀 버스트' 포즈로 유명합니다.</p></div>
+      </article>
+      <article class="ms reveal">
+        <div class="ms-top" style="background:linear-gradient(135deg,#0f6b5f,#9ff0e0)"><span class="code">GN-001</span></div>
+        <div class="ms-body"><h3>건담 엑시아</h3><div class="pilot">파일럿 · 세츠나 F. 세이에이</div><p>『기동전사 건담 00』의 주역기. 7자루의 검을 가진 근접전 특화 기체입니다.</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 시리즈 연표 -->
+<section id="series" class="alt">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="en">SERIES</span>
+      <h2>대표 시리즈 연표</h2>
+      <p>건담은 크게 원조 세계관인 <b>우주세기</b>와, 독립된 세계를 다루는 <b>얼터너티브(비우주세기)</b> 작품으로 나뉩니다. 각 얼터너티브 작품은 따로 봐도 이해할 수 있습니다.</p>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-filter="all">전체</button>
+      <button class="tab" data-filter="uc">우주세기</button>
+      <button class="tab" data-filter="alt">얼터너티브</button>
+    </div>
+    <div class="legend"><span><i style="background:var(--blue)"></i>우주세기</span><span><i style="background:var(--yellow)"></i>얼터너티브</span></div>
+    <div class="timeline" id="timeline">
+      <div class="tl" data-type="uc"><span class="year">1979</span><h4>기동전사 건담</h4><p>모든 것의 시작. 1년 전쟁과 아무로·샤아의 대결.</p></div>
+      <div class="tl" data-type="uc"><span class="year">1985</span><h4>기동전사 Z건담</h4><p>1년 전쟁 7년 후, 연방 내부의 분열을 그린 직계 속편.</p></div>
+      <div class="tl" data-type="uc"><span class="year">1986</span><h4>기동전사 건담 ZZ</h4><p>Z건담 직후 이야기. 초반은 밝은 분위기로 시작합니다.</p></div>
+      <div class="tl" data-type="uc"><span class="year">1988</span><h4>기동전사 건담: 역습의 샤아</h4><p>아무로와 샤아의 마지막 결전을 그린 극장판.</p></div>
+      <div class="tl" data-type="uc"><span class="year">1991</span><h4>기동전사 건담 F91</h4><p>우주세기 0123년을 배경으로 한 극장판.</p></div>
+      <div class="tl" data-type="alt"><span class="year">1994</span><h4>기동무투전 G건담</h4><p>국가 대표 건담끼리 격투 대회를 벌이는 이색작. 첫 얼터너티브 TV 시리즈.</p></div>
+      <div class="tl" data-type="alt"><span class="year">1995</span><h4>신기동전기 건담 W</h4><p>다섯 명의 소년 파일럿이 주인공. 해외에서도 큰 인기를 얻었습니다.</p></div>
+      <div class="tl" data-type="alt"><span class="year">1999</span><h4>∀(턴에이) 건담</h4><p>모든 건담 세계를 아우르는 듯한 독특한 분위기의 20주년 기념작.</p></div>
+      <div class="tl" data-type="alt"><span class="year">2002</span><h4>기동전사 건담 SEED</h4><p>유전자 조작 인류와 자연 인류의 대립. 2000년대 건담 붐을 이끌었습니다.</p></div>
+      <div class="tl" data-type="alt"><span class="year">2007</span><h4>기동전사 건담 00</h4><p>무력으로 전쟁을 근절하려는 사설 무장 조직 '솔레스탈 빙'의 이야기.</p></div>
+      <div class="tl" data-type="uc"><span class="year">2010</span><h4>기동전사 건담 UC(유니콘)</h4><p>역습의 샤아 3년 후. 높은 작화 퀄리티로 우주세기 입문작으로도 추천됩니다.</p></div>
+      <div class="tl" data-type="alt"><span class="year">2015</span><h4>기동전사 건담 철혈의 오펀스</h4><p>소년병 집단 '철화단'의 생존기. 빔 병기가 거의 없는 묵직한 근접전이 특징.</p></div>
+      <div class="tl" data-type="alt"><span class="year">2022</span><h4>기동전사 건담 수성의 마녀</h4><p>첫 여성 주인공 TV 시리즈. 학원물로 시작해 신규 팬층을 크게 넓혔습니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 건프라 -->
+<section id="gunpla">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="en">GUNPLA</span>
+      <h2>건프라: 직접 만드는 건담</h2>
+      <p>'건담 프라모델'의 줄임말. 1980년 첫 발매 이후 건담 인기를 떠받친 일등 공신입니다. 대부분 접착제 없이 끼워서 조립하고, 색도 이미 사출되어 있어 초보자도 쉽게 시작할 수 있습니다.</p>
+    </div>
+    <div class="grades">
+      <div class="grade reveal"><div class="g" style="color:#7ab8ff">HG</div><div class="scale">High Grade · 1/144</div><p>작고 저렴하며 종류가 가장 많은 등급. 입문용으로 추천.</p></div>
+      <div class="grade reveal"><div class="g" style="color:#9ff0e0">RG</div><div class="scale">Real Grade · 1/144</div><p>HG 크기에 MG급 디테일을 담았지만 부품이 작아 난도가 높은 편.</p></div>
+      <div class="grade reveal"><div class="g" style="color:var(--yellow)">MG</div><div class="scale">Master Grade · 1/100</div><p>내부 골격까지 재현한 중급자용. 완성했을 때의 만족감이 큽니다.</p></div>
+      <div class="grade reveal"><div class="g" style="color:var(--red)">PG</div><div class="scale">Perfect Grade · 1/60</div><p>크기와 디테일 모두 최상위. 가격과 조립 시간도 최상위.</p></div>
+    </div>
+    <div class="tip reveal"><b>입문 팁 —</b> 니퍼 하나와 마음에 드는 기체의 HG 키트로 시작해 보세요. 마음에 드는 디자인을 고르는 게 가장 중요합니다.</div>
+  </div>
+</section>
+
+<!-- 방명록 (Supabase) -->
+<section id="guestbook" class="alt">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="en">GUESTBOOK</span>
+      <h2>파일럿 방명록</h2>
+      <p>좋아하는 기체와 함께 한마디 남겨 주세요. 남긴 글은 모든 방문자에게 공개됩니다.</p>
+    </div>
+    <div class="gb-grid">
+      <form class="gb-form" id="gb-form" novalidate>
+        <label>닉네임
+          <input name="name" maxlength="20" required placeholder="예: 붉은 혜성">
+        </label>
+        <label>좋아하는 기체 (선택)
+          <select name="favorite_ms">
+            <option value="">선택 안 함</option>
+            <option>RX-78-2 건담</option><option>자쿠 II</option><option>사자비</option>
+            <option>ν건담</option><option>유니콘 건담</option><option>윙 건담 제로</option>
+            <option>프리덤 건담</option><option>건담 엑시아</option><option>기타</option>
+          </select>
+        </label>
+        <label>메시지
+          <textarea name="message" maxlength="300" required placeholder="건담에 대한 한마디!"></textarea>
+        </label>
+        <div class="gb-count" id="gb-count">0 / 300</div>
+        <button type="submit" class="btn btn-primary" id="gb-submit">남기기</button>
+        <div class="gb-status" id="gb-status" role="status"></div>
+      </form>
+      <div class="gb-list" id="gb-list"><div class="gb-empty">불러오는 중…</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>건담 입문 가이드 · 팬이 만든 비공식 소개 페이지입니다.</p>
+    <p>「기동전사 건담」 및 관련 명칭의 권리는 각 권리자에게 있습니다.</p>
+  </div>
+</footer>
+
+<script src="config.js"></script>
+<script>
+  // 모바일 메뉴
+  const burger = document.getElementById('burger');
+  const menu = document.getElementById('menu');
+  burger.addEventListener('click', () => menu.classList.toggle('open'));
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu.classList.remove('open')));
+
+  // 스크롤 등장 효과
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('show'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // 시리즈 필터
+  const tabs = document.querySelectorAll('.tab');
+  const items = document.querySelectorAll('#timeline .tl');
+  tabs.forEach(tab => tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const f = tab.dataset.filter;
+    items.forEach(it => it.classList.toggle('hide', f !== 'all' && it.dataset.type !== f));
+  }));
+
+  // ---------- Supabase 방명록 ----------
+  // 연결 정보는 config.js 에서 불러옵니다 (config.example.js 참고).
+  const { SUPABASE_URL = '', SUPABASE_KEY = '' } = window.APP_CONFIG || {};
+  const API = `${SUPABASE_URL}/rest/v1/guestbook`;
+  const HEADERS = { apikey: SUPABASE_KEY, 'Content-Type': 'application/json' };
+  const PAGE = 20;
+
+  const gbForm = document.getElementById('gb-form');
+  const gbList = document.getElementById('gb-list');
+  const gbStatus = document.getElementById('gb-status');
+  const gbSubmit = document.getElementById('gb-submit');
+  const gbCount = document.getElementById('gb-count');
+  let offset = 0;
+
+  const setStatus = (msg, type = '') => { gbStatus.textContent = msg; gbStatus.className = 'gb-status ' + type; };
+  const fmt = iso => new Date(iso).toLocaleString('ko-KR', { dateStyle: 'medium', timeStyle: 'short' });
+
+  async function apiError(res) {
+    let body = {};
+    try { body = await res.json(); } catch {}
+    if (body.code === 'PGRST205' || res.status === 404) return '방명록 테이블이 아직 없습니다. supabase/schema.sql 을 실행해 주세요.';
+    return body.message || `요청 실패 (HTTP ${res.status})`;
+  }
+
+  function renderItem(row) {
+    // innerHTML 대신 textContent 사용 → 사용자 입력에 의한 XSS 방지
+    const el = document.createElement('article');
+    el.className = 'gb-item';
+    const meta = document.createElement('div'); meta.className = 'gb-meta';
+    const name = document.createElement('b'); name.textContent = row.name; meta.append(name);
+    if (row.favorite_ms) { const c = document.createElement('span'); c.className = 'chip'; c.textContent = row.favorite_ms; meta.append(c); }
+    const t = document.createElement('time'); t.dateTime = row.created_at; t.textContent = fmt(row.created_at); meta.append(t);
+    const p = document.createElement('p'); p.textContent = row.message;
+    el.append(meta, p);
+    return el;
+  }
+
+  async function loadEntries(reset = true) {
+    if (!SUPABASE_URL || !SUPABASE_KEY) {
+      gbList.innerHTML = '<div class="gb-empty">config.js 에 Supabase 설정이 없습니다. config.example.js 를 참고해 만들어 주세요.</div>';
+      gbSubmit.disabled = true;
+      return;
+    }
+    if (SUPABASE_KEY.startsWith('sb_secret_')) {
+      gbList.innerHTML = '<div class="gb-empty">⚠ config.js 에 Secret 키가 들어 있습니다. 즉시 Publishable 키로 교체하고 Secret 키를 재발급하세요.</div>';
+      gbSubmit.disabled = true;
+      return;
+    }
+    if (reset) offset = 0;
+    try {
+      const url = `${API}?select=id,name,favorite_ms,message,created_at&order=created_at.desc&limit=${PAGE}&offset=${offset}`;
+      const res = await fetch(url, { headers: HEADERS });
+      if (!res.ok) throw new Error(await apiError(res));
+      const rows = await res.json();
+      if (reset) gbList.replaceChildren();
+      gbList.querySelector('.gb-more')?.remove();
+      if (reset && rows.length === 0) {
+        gbList.innerHTML = '<div class="gb-empty">아직 글이 없습니다. 첫 번째 파일럿이 되어 주세요!</div>';
+        return;
+      }
+      rows.forEach(r => gbList.append(renderItem(r)));
+      offset += rows.length;
+      if (rows.length === PAGE) {
+        const more = document.createElement('button');
+        more.className = 'gb-more'; more.type = 'button'; more.textContent = '더 보기';
+        more.onclick = () => loadEntries(false);
+        gbList.append(more);
+      }
+    } catch (e) {
+      gbList.replaceChildren();
+      const d = document.createElement('div'); d.className = 'gb-empty'; d.textContent = '불러오기 실패: ' + e.message;
+      gbList.append(d);
+    }
+  }
+
+  gbForm.message.addEventListener('input', () => { gbCount.textContent = `${gbForm.message.value.length} / 300`; });
+
+  gbForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const name = gbForm.name.value.trim();
+    const message = gbForm.message.value.trim();
+    const favorite_ms = gbForm.favorite_ms.value || null;
+    if (!name) return setStatus('닉네임을 입력해 주세요.', 'err');
+    if (!message) return setStatus('메시지를 입력해 주세요.', 'err');
+
+    gbSubmit.disabled = true; setStatus('전송 중…');
+    try {
+      const res = await fetch(API, {
+        method: 'POST',
+        headers: { ...HEADERS, Prefer: 'return=minimal' },
+        body: JSON.stringify({ name, message, favorite_ms })
+      });
+      if (!res.ok) throw new Error(await apiError(res));
+      gbForm.message.value = ''; gbCount.textContent = '0 / 300';
+      setStatus('등록되었습니다!', 'ok');
+      loadEntries();
+    } catch (err) {
+      setStatus(err.message, 'err');
+    } finally {
+      gbSubmit.disabled = false;
+    }
+  });
+
+  loadEntries();
+</script>
+</body>
+</html>

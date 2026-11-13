@@ -1,0 +1,5 @@
+# config.js 에는 공개(publishable) 키만 들어 있어 배포에 포함합니다.
+# Secret 키나 .env 파일은 절대 올리지 않습니다.
+.env
+.env.*
+.claude/
